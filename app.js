@@ -4,6 +4,9 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const flash = require('connect-flash')
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -15,7 +18,7 @@ app.set('view engine', 'hbs')
 app.use(flash())
 
 app.use(session({
-  secret: 'MySecretForApp',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))
