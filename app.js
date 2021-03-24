@@ -21,8 +21,7 @@ app.use(session({
 }))
 
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(methodOverride('__method'))
-
+app.use(methodOverride('_method'))
 userPassport(app)
 
 app.use((req, res, next) => {
