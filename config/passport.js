@@ -11,11 +11,11 @@ module.exports = app => {
   passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
     User.findOne({ where: { email } })
       .then(user => {
-        if (!user) return done(null, false, { message: 'That email is not registered!' })
+        if (!user) return done(null, false, { type: 'warning_msg', message: 'That email is not registered!' })
         return bcrypt.compare(password, user.password)
           .then(isMatch => {
             if (isMatch) return done(null, user)
-            return done(null, false, { message: 'Email or Password incorrect.' })
+            return done(null, false, { type: 'warning_msg', message: 'Email or Password incorrect.' })
           })
           .catch(err => done(err, false))
       })
