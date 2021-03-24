@@ -16,7 +16,19 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('__method'))
 
 app.get('/', (req, res) => {
-  res.render('index')
+  return Todo.findAll({
+    raw: true,
+    nest: true
+  })
+    .then(todos => { return res.render('index', { todos }) })
+    .catch(error => { return res.status(422).json(error) })
+})
+
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id
+  return Todo.findByPk(id)
+    .then(todo => { return res.render('detail', { todo: todo.toJSON() }) })
+    .catch(error => console.log(error))
 })
 
 // routes for user authentication
