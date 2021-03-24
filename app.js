@@ -7,7 +7,7 @@ const methodOverride = require('method-override')
 const app = express()
 const PORT = process.env.PORT || 3000
 const userPassport = require('./config/passport')
-const route = require('./routes')
+const routes = require('./routes')
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
@@ -23,7 +23,13 @@ app.use(methodOverride('__method'))
 
 userPassport(app)
 
-app.use(route)
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  return next()
+})
+
+app.use(routes)
 
 // listen server
 app.listen(PORT, () => {
